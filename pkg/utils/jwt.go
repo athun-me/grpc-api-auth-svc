@@ -2,12 +2,12 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/athunlal/auth-svc/pkg/models"
 	"github.com/golang-jwt/jwt"
 )
-
 type JwtWrapper struct {
 	SecretKey       string
 	Issuer          string
@@ -51,13 +51,14 @@ func (w *JwtWrapper) ValidateToken(signedToken string) (claims *jwtClaims, err e
 	)
 
 	if err != nil {
+		fmt.Println("error :", err)
 		return
 	}
 
 	claims, ok := token.Claims.(*jwtClaims)
 
 	if !ok {
-		return nil, errors.New("Couldn't parse claims")
+		return nil, errors.New("couldn't parse claims")
 	}
 
 	if claims.ExpiresAt < time.Now().Local().Unix() {
